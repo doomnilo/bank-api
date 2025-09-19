@@ -1,0 +1,63 @@
+# Built application files
+*.jar
+*.war
+*.ear
+target/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.metadata/
+.settings/
+*.tmp
+
+# NetBeans
+nb-configuration.xml
+nbactions.xml
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/wrapper/maven-wrapper.properties
+
+# Spring Boot
+application.yml
+application-prod.yml
+
+# IDE specific
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite
+
+# Gradle
+.gradle/
+
+# macOS
+._*
+
+# Windows
+~*
+
+# Agents
+AGENTS.md
+BUILD_PLAN.md

@@ -1,0 +1,21 @@
+package com.example.bankapi.repository;
+
+import com.example.bankapi.model.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
+
+    /**
+     * Buscar cuenta por número de cuenta (accountNumber)
+     */
+    Optional<Account> findByAccountNumber(String accountNumber);
+
+    /**
+     * Comprobar si existe una cuenta por su número
+     */
+    boolean existsByAccountNumber(String accountNumber);
+}
