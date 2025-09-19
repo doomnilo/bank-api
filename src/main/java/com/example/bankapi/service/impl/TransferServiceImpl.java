@@ -3,6 +3,7 @@ package com.example.bankapi.service.impl;
 import com.example.bankapi.model.Transfer;
 import com.example.bankapi.model.dto.TransferDto;
 import com.example.bankapi.repository.TransferRepository;
+import com.example.bankapi.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransferServiceImpl {
+public class TransferServiceImpl implements TransferService {
 
     @Autowired
     private TransferRepository transferRepository;

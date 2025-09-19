@@ -3,6 +3,7 @@ package com.example.bankapi.service.impl;
 import com.example.bankapi.model.Account;
 import com.example.bankapi.model.dto.AccountDto;
 import com.example.bankapi.repository.AccountRepository;
+import com.example.bankapi.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AccountServiceImpl {
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
