@@ -1,14 +1,14 @@
-package com.example.bankapi.controller;
+package com.tlchallenge.bankapi.controller;
 
-import com.example.bankapi.model.Transfer;
-import com.example.bankapi.model.dto.TransferDto;
-import com.example.bankapi.service.TransferService;
+import com.tlchallenge.bankapi.model.Transfer;
+import com.tlchallenge.bankapi.model.dto.TransferDto;
+import com.tlchallenge.bankapi.service.TransferService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 

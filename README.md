@@ -31,13 +31,12 @@ This application provides a complete solution for managing bank accounts and pro
 ### Prerequisites
 
 - Java 21
-- Maven 3.6+
 - Docker (for containerized deployment)
 
 ### Running Locally
 
 1. Clone the repository
-2. Configure database connection in `application.yml`
+2. Copy `.env.example` file to `.env` and configure values
 3. Run `mvn spring-boot:run` to start the application
 
 ### Building
@@ -60,7 +59,7 @@ mvn test
 ## Project Structure
 
 ```
-com.example.bankapi
+com.tlchallenge.bankapi
 ├── BankApiApplication.java
 ├── config
 │   ├── SecurityConfig.java

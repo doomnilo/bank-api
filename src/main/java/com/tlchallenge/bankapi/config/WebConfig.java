@@ -1,4 +1,4 @@
-package com.example.bankapi.config;
+package com.tlchallenge.bankapi.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
