@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/transfers")
+@RequestMapping("/api/v1/transfers")
 public class TransferController {
 
     @Autowired
