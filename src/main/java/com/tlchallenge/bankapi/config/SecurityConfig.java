@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/accounts/**").permitAll()
                 .requestMatchers("/api/v1/transfers/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                .requestMatchers("/actuator/health", "/actuator/metrics", "/actuator/prometheus").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

@@ -4,6 +4,8 @@ import com.tlchallenge.bankapi.model.Transfer;
 import com.tlchallenge.bankapi.model.dto.TransferDto;
 import com.tlchallenge.bankapi.service.TransferService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +18,26 @@ import java.util.Optional;
 @RequestMapping("/api/v1/transfers")
 public class TransferController {
 
+    private static final Logger log = LoggerFactory.getLogger(TransferController.class);
+
     @Autowired
     private TransferService transferService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Transfer> getTransfer(@PathVariable Long id) {
+        log.info("Fetching transfer with id={}", id);
         Optional<Transfer> transfer = transferService.getTransferById(id);
         return transfer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Transfer> createTransfer(@Valid @RequestBody TransferDto transferDto) {
+        log.info("Creating transfer: {}", transferDto);
         try {
             Transfer createdTransfer = transferService.createTransfer(transferDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdTransfer);
         } catch (Exception e) {
+            log.error("Error creating transfer", e);
             return ResponseEntity.badRequest().build();
         }
     }

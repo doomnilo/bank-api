@@ -25,5 +25,39 @@ services:
     ports:
       - "5432:5432"
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - prometheus-data:/prometheus
+
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    user: root
+    volumes:
+      - loki-data:/tmp/loki
+    ports:
+      - "3100:3100"
+
 volumes:
   postgres_data:
+  grafana-data:
+  tempo-data:
+  loki-data:
+  prometheus-data:

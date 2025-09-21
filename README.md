@@ -91,6 +91,11 @@ com.tlchallenge.bankapi
     └── ValidationUtils.java
 ```
 
+## Observability
+
+The system haves a Grafana service  for observability purposes.
+Import dashboard definition from `./observability/grafana_dashboard.json` In Grafana (accesible at: http://localhost:3000 [default credentials]) with preconfigured metrics.
+
 ## Deployment
 
 The application can be containerized using the provided Dockerfile and docker-compose.yml files.
