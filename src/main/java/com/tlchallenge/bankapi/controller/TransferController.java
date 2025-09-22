@@ -33,13 +33,10 @@ public class TransferController {
     @PostMapping
     public ResponseEntity<Transfer> createTransfer(@Valid @RequestBody TransferDto transferDto) {
         log.info("Creating transfer: {}", transferDto);
-        try {
-            Transfer createdTransfer = transferService.createTransfer(transferDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdTransfer);
-        } catch (Exception e) {
-            log.error("Error creating transfer", e);
-            return ResponseEntity.badRequest().build();
-        }
+
+        Transfer createdTransfer = transferService.createTransfer(transferDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTransfer);
     }
 
     @GetMapping

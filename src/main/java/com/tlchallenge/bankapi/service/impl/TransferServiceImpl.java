@@ -1,5 +1,6 @@
 package com.tlchallenge.bankapi.service.impl;
 
+import com.tlchallenge.bankapi.exception.TransferRejectedException;
 import com.tlchallenge.bankapi.model.Account;
 import com.tlchallenge.bankapi.model.Transfer;
 import com.tlchallenge.bankapi.model.dto.TransferDto;
@@ -50,24 +51,43 @@ public class TransferServiceImpl implements TransferService {
 
         try {
             if (dto.getAmount() == null || dto.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-                transfer.setStatus("REJECTED"); // monto inválido
-            } else if (fromAccount.getBalance().compareTo(dto.getAmount()) < 0) {
-                transfer.setStatus("REJECTED"); // saldo insuficiente
-            } else {
-                fromAccount.setBalance(fromAccount.getBalance().subtract(dto.getAmount()));
-                toAccount.setBalance(toAccount.getBalance().add(dto.getAmount()));
-
-                accountRepository.save(fromAccount);
-                accountRepository.save(toAccount);
-
-                transfer.setStatus("COMPLETED");
+                transfer.setStatus("REJECTED");
+                transferRepository.save(transfer);
+                throw new TransferRejectedException(
+                        dto.getFromAccountId(),
+                        dto.getToAccountId(),
+                        "Invalid amount"
+                );
             }
+
+            if (fromAccount.getBalance().compareTo(dto.getAmount()) < 0) {
+                transfer.setStatus("REJECTED");
+                transferRepository.save(transfer);
+                throw new TransferRejectedException(
+                        dto.getFromAccountId(),
+                        dto.getToAccountId(),
+                        "Insufficient funds"
+                );
+            }
+
+            fromAccount.setBalance(fromAccount.getBalance().subtract(dto.getAmount()));
+            toAccount.setBalance(toAccount.getBalance().add(dto.getAmount()));
+
+            accountRepository.save(fromAccount);
+            accountRepository.save(toAccount);
+
+            transfer.setStatus("COMPLETED");
+            return transferRepository.save(transfer);
+
+        } catch (TransferRejectedException e) {
+            log.warn("Transfer rejected: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
             transfer.setStatus("PENDING");
-            log.error("Error executing transfer", e);
+            transferRepository.save(transfer);
+            log.error("Unexpected error while executing transfer", e);
+            throw new RuntimeException("Unexpected error while executing transfer", e);
         }
-
-        return transferRepository.save(transfer);
     }
 
     @Override
