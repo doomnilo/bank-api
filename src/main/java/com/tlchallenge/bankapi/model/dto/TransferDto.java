@@ -15,8 +15,6 @@ public class TransferDto {
     @NotNull
     private BigDecimal amount;
 
-    private String status; // opcional al crear, puede default a "PENDING"
-
     // Getters y Setters
     public Long getFromAccountId() {
         return fromAccountId;
@@ -40,14 +38,6 @@ public class TransferDto {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
 
