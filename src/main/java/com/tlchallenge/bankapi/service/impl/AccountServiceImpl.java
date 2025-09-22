@@ -1,5 +1,7 @@
 package com.tlchallenge.bankapi.service.impl;
 
+import com.tlchallenge.bankapi.exception.AccountNotFoundException;
+import com.tlchallenge.bankapi.exception.InvalidAccountDataException;
 import com.tlchallenge.bankapi.model.Account;
 import com.tlchallenge.bankapi.model.dto.AccountDto;
 import com.tlchallenge.bankapi.repository.AccountRepository;
@@ -21,18 +23,26 @@ public class AccountServiceImpl implements AccountService {
      * Obtener cuenta por ID
      */
     public Optional<Account> getAccountById(Long id) {
-        return accountRepository.findById(id);
+        return Optional.ofNullable(accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id)));
     }
 
     /**
      * Crear nueva cuenta a partir de AccountDto
      */
     public Account createAccount(AccountDto dto) {
+        if (dto.getAccountNumber() == null || dto.getAccountNumber().isBlank()) {
+            throw new InvalidAccountDataException("account number", "Account number cannot be null or empty");
+        }
+        if (dto.getBalance() == null || dto.getBalance().signum() < 0) {
+            throw new InvalidAccountDataException("account balance", "Balance must be non-negative");
+        }
+
         Account account = new Account();
         account.setAccountNumber(dto.getAccountNumber());
         account.setBalance(dto.getBalance());
         account.setCreatedAt(LocalDateTime.now());
         account.setUpdatedAt(LocalDateTime.now());
+
         return accountRepository.save(account);
     }
 
@@ -40,12 +50,15 @@ public class AccountServiceImpl implements AccountService {
      * Actualizar cuenta existente
      */
     public Account updateAccount(Long id, AccountDto dto) {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isEmpty()) {
-            throw new RuntimeException("Account not found");
+        Account account = accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
+
+        if (dto.getAccountNumber() == null || dto.getAccountNumber().isBlank()) {
+            throw new InvalidAccountDataException("account number", "Account number cannot be null or empty");
+        }
+        if (dto.getBalance() == null || dto.getBalance().signum() < 0) {
+            throw new InvalidAccountDataException("account balance", "Balance must be non-negative");
         }
 
-        Account account = optionalAccount.get();
         account.setAccountNumber(dto.getAccountNumber());
         account.setBalance(dto.getBalance());
         account.setUpdatedAt(LocalDateTime.now());
@@ -57,11 +70,9 @@ public class AccountServiceImpl implements AccountService {
      * Eliminar cuenta
      */
     public boolean deleteAccount(Long id) {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isEmpty()) {
-            return false;
-        }
-        accountRepository.deleteById(id);
+        Account account = accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id));
+        accountRepository.delete(account);
+
         return true;
     }
 

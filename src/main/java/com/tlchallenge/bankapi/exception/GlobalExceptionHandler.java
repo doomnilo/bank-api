@@ -61,5 +61,31 @@ public class GlobalExceptionHandler {
                 "toAccountId", ex.getToAccountId()
         ));
     }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleAccountNotFound(AccountNotFoundException ex) {
+        log.warn("Account not found: {}", ex.getAccountId());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "Account Not Found",
+                "message", ex.getMessage(),
+                "accountId", ex.getAccountId()
+        ));
+    }
+
+    @ExceptionHandler(InvalidAccountDataException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidAccountData(InvalidAccountDataException ex) {
+        log.warn("Invalid account data: field={}", ex.getField());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "error", "Invalid Account Data",
+                "message", ex.getMessage(),
+                "field", ex.getField()
+        ));
+    }
 }
 

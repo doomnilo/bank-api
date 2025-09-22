@@ -24,55 +24,43 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable Long id) {
+    public ResponseEntity<Optional<Account>> getAccount(@PathVariable Long id) {
         logger.info("Fetching account with id={}", id);
-
         Optional<Account> account = accountService.getAccountById(id);
 
-        if (account.isPresent()) {
-            logger.debug("Account found: {}", account.get());
-            return ResponseEntity.ok(account.get());
-        } else {
-            logger.warn("Account with id={} not found", id);
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(account);
     }
 
     @PostMapping
     public ResponseEntity<Account> createAccount(@Valid @RequestBody AccountDto accountDto) {
         logger.info("Creating account: {}", accountDto);
-        try {
-            Account createdAccount = accountService.createAccount(accountDto);
-            logger.info("Account created successfully with id={}", createdAccount.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
-        } catch (Exception e) {
-            logger.error("Error creating account: {}", e.getMessage(), e);
-            return ResponseEntity.badRequest().build();
-        }
+        Account createdAccount = accountService.createAccount(accountDto);
+        logger.info("Account created successfully with id={}", createdAccount.getId());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @Valid @RequestBody AccountDto accountDto) {
         logger.info("Updating account with id={}: {}", id, accountDto);
-        try {
-            Account updatedAccount = accountService.updateAccount(id, accountDto);
-            logger.info("Account updated successfully with id={}", updatedAccount.getId());
-            return ResponseEntity.ok(updatedAccount);
-        } catch (Exception e) {
-            logger.warn("Failed to update account with id={}: {}", id, e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+        Account updatedAccount = accountService.updateAccount(id, accountDto);
+        logger.info("Account updated successfully with id={}", updatedAccount.getId());
+
+        return ResponseEntity.ok(updatedAccount);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         logger.info("Deleting account with id={}", id);
         boolean deleted = accountService.deleteAccount(id);
+
         if (deleted) {
             logger.info("Account deleted successfully with id={}", id);
+
             return ResponseEntity.noContent().build();
         } else {
             logger.warn("Account with id={} not found, cannot delete", id);
+
             return ResponseEntity.notFound().build();
         }
     }
@@ -82,6 +70,7 @@ public class AccountController {
         logger.info("Fetching all accounts");
         List<Account> accounts = accountService.getAllAccounts();
         logger.debug("Number of accounts retrieved: {}", accounts.size());
+
         return ResponseEntity.ok(accounts);
     }
 }
