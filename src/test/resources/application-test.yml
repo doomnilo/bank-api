@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DATASOURCE_URL}/${DATASOURCE_DB}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: public
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yml
+    contexts: development
+    default-schema: ${DATASOURCE_SCHEMA:public}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    enabled: false
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: bankapi
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  otlp:
+    enabled: false
+  level:
+    liquibase: debug
+    com.github.loki4j: DEBUG
