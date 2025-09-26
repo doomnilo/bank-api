@@ -100,6 +100,19 @@ Import dashboard definition from `./observability/grafana_dashboard.json` In Gra
 
 The application can be containerized using the provided Dockerfile and docker-compose.yml files.
 
+## Running locally containerized
+
+Configure env file with these values (the others can be chosen at discretion):
+
+- DATASOURCE_URL=db:5432
+- LOKI_URL=loki:3100
+
+Then run with these
+
+```
+docker-compose --env-file .env.containerized up -d --build
+```
+
 ## License
 
 This project is licensed under the MIT License.
