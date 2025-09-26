@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+AGENTS.md
+BUILD_PLAN.md
+TODO.md
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.metadata/
+.settings/
+*.tmp
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+._*
+
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.properties
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database files
+*.db
+*.sqlite
+
+# Build artifacts
+build/
+out/
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Observability config (will be mounted as volumes)
+observability/
+
+# Test files
+src/test/
+
+# Temporary files
+*.tmp
+*.temp
