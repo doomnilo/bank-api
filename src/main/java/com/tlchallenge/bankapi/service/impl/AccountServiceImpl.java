@@ -6,6 +6,7 @@ import com.tlchallenge.bankapi.model.Account;
 import com.tlchallenge.bankapi.model.dto.AccountDto;
 import com.tlchallenge.bankapi.repository.AccountRepository;
 import com.tlchallenge.bankapi.service.AccountService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,17 @@ public class AccountServiceImpl implements AccountService {
     /**
      * Obtener cuenta por ID
      */
+    @CircuitBreaker(name = "account-service", fallbackMethod = "fallbackGetAccount")
     public Optional<Account> getAccountById(Long id) {
         return Optional.ofNullable(accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException(id)));
+    }
+
+    /**
+     * Fallback method for getAccountById
+     */
+    public Optional<Account> fallbackGetAccount(Long id, Exception ex) {
+        // Log the fallback and return empty optional
+        return Optional.empty();
     }
 
     /**

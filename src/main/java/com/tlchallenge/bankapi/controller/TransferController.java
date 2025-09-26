@@ -3,6 +3,7 @@ package com.tlchallenge.bankapi.controller;
 import com.tlchallenge.bankapi.model.Transfer;
 import com.tlchallenge.bankapi.model.dto.TransferDto;
 import com.tlchallenge.bankapi.service.TransferService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class TransferController {
     }
 
     @PostMapping
+    @RateLimiter(name = "transfer-api")
     public ResponseEntity<Transfer> createTransfer(@Valid @RequestBody TransferDto transferDto) {
         log.info("Creating transfer: {}", transferDto);
 

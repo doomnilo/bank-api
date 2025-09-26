@@ -7,10 +7,12 @@ import com.tlchallenge.bankapi.model.dto.TransferDto;
 import com.tlchallenge.bankapi.repository.AccountRepository;
 import com.tlchallenge.bankapi.repository.TransferRepository;
 import com.tlchallenge.bankapi.service.TransferService;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,8 +38,10 @@ public class TransferServiceImpl implements TransferService {
     }
 
     /**
-     * Crear nueva transferencia
+     * Crear nueva transferencia de forma atómica
      */
+    @Retry(name = "transfer-service")
+    @Transactional(rollbackFor = Exception.class, isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Transfer createTransfer(TransferDto dto) {
         Account fromAccount = accountRepository.findById(dto.getFromAccountId()).orElseThrow(() -> new IllegalArgumentException("From account not found"));
         Account toAccount = accountRepository.findById(dto.getToAccountId()).orElseThrow(() -> new IllegalArgumentException("To account not found"));
@@ -83,7 +87,7 @@ public class TransferServiceImpl implements TransferService {
             log.warn("Transfer rejected: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
-            transfer.setStatus("PENDING");
+            transfer.setStatus("FAILED");
             transferRepository.save(transfer);
             log.error("Unexpected error while executing transfer", e);
             throw new RuntimeException("Unexpected error while executing transfer", e);
