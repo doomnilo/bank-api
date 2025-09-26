@@ -12,5 +12,6 @@ public interface TransferService {
     Transfer createTransfer(TransferDto dto);
     List<Transfer> getAllTransfers();
     BigDecimal getAccountBalance(Long accountId);
+    List<Transfer> getTransfersByFromAccountId(Long fromAccountId);
 }
 

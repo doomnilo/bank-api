@@ -62,6 +62,7 @@ application-prod.yml
 # Agents
 AGENTS.md
 BUILD_PLAN.md
+CLAUDE.md
 
 # Misc
 TODO.md

@@ -107,4 +107,13 @@ public class TransferServiceImpl implements TransferService {
     public List<Transfer> getAllTransfers() {
         return transferRepository.findAll();
     }
+
+    /**
+     * Obtener transferencias por cuenta de origen
+     */
+    @Override
+    public List<Transfer> getTransfersByFromAccountId(Long fromAccountId) {
+        log.info("Fetching transfers for account id={}", fromAccountId);
+        return transferRepository.findByFromAccountIdOrderByTransferDateDesc(fromAccountId);
+    }
 }

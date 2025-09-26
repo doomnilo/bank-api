@@ -46,4 +46,11 @@ public class TransferController {
         List<Transfer> transfers = transferService.getAllTransfers();
         return ResponseEntity.ok(transfers);
     }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<List<Transfer>> getTransfersByFromAccountId(@PathVariable Long accountId) {
+        log.info("Fetching transfers for account id={}", accountId);
+        List<Transfer> transfers = transferService.getTransfersByFromAccountId(accountId);
+        return ResponseEntity.ok(transfers);
+    }
 }
